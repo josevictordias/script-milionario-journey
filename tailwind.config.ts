@@ -13,6 +13,12 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'sans': ['Poppins', 'system-ui', 'sans-serif'],
+        'display': ['Oswald', 'system-ui', 'sans-serif'],
+        'poppins': ['Poppins', 'system-ui', 'sans-serif'],
+        'oswald': ['Oswald', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

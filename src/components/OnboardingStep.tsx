@@ -55,9 +55,8 @@ export const OnboardingStep: React.FC<OnboardingStepProps> = ({ step, onClick })
   };
 
   const handleClick = () => {
-    if (step.status !== 'blocked') {
-      onClick();
-    }
+    // Always call onClick to allow notification for blocked steps
+    onClick();
   };
 
   return (

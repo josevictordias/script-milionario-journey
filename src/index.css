@@ -6,66 +6,69 @@
 
 @layer base {
   :root {
-    /* Premium Blue Gradient Background */
-    --background: 220 60% 8%;
+    /* Sales Page Identity - Deep Black Background */
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
 
-    /* Card System */
-    --card: 220 50% 12%;
+    /* Card System - Darker Cards */
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 220 50% 10%;
+    --popover: 0 0% 6%;
     --popover-foreground: 0 0% 98%;
 
-    /* Primary - Electric Blue */
-    --primary: 195 100% 50%;
-    --primary-foreground: 220 60% 8%;
-    --primary-glow: 195 100% 65%;
+    /* Primary - Vibrant Orange (like sales page) */
+    --primary: 16 100% 60%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 16 100% 70%;
 
-    /* Secondary - Deep Blue */
-    --secondary: 220 50% 15%;
+    /* Secondary - Darker Grays */
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 98%;
 
-    /* Muted - Darker Blues */
-    --muted: 220 30% 20%;
-    --muted-foreground: 220 15% 65%;
+    /* Muted - Dark Grays */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
 
-    /* Accent - Premium Gold/Yellow */
-    --accent: 45 100% 60%;
-    --accent-foreground: 220 60% 8%;
-    --accent-glow: 45 100% 75%;
+    /* Accent - Golden Yellow (like sales page) */
+    --accent: 45 100% 55%;
+    --accent-foreground: 0 0% 8%;
+    --accent-glow: 45 100% 65%;
 
-    /* Success - Cyan Check */
-    --success: 180 100% 50%;
-    --success-foreground: 220 60% 8%;
+    /* Success - Energetic Green */
+    --success: 142 100% 45%;
+    --success-foreground: 0 0% 98%;
 
-    /* Warning - Blocked Gray */
-    --warning: 220 10% 40%;
-    --warning-foreground: 220 10% 60%;
+    /* Warning - Urgent Red */
+    --warning: 0 84% 55%;
+    --warning-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 30% 25%;
-    --input: 220 50% 15%;
-    --ring: 195 100% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 10%;
+    --ring: 16 100% 60%;
 
     --radius: 0.75rem;
 
-    /* Premium Gradients */
+    /* Sales Page Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-background: linear-gradient(135deg, hsl(220 70% 6%), hsl(220 50% 12%));
-    --gradient-card: linear-gradient(145deg, hsl(220 50% 12%), hsl(220 40% 15%));
+    --gradient-background: linear-gradient(135deg, hsl(0 0% 2%), hsl(0 0% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 6%), hsl(0 0% 12%));
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-glow)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(142 100% 55%));
 
-    /* Shadows */
-    --shadow-premium: 0 20px 40px -10px hsl(var(--primary) / 0.3);
-    --shadow-card: 0 10px 30px -5px hsl(220 60% 5% / 0.5);
-    --shadow-glow: 0 0 30px hsl(var(--accent) / 0.4);
+    /* Dramatic Shadows */
+    --shadow-premium: 0 25px 50px -12px hsl(var(--primary) / 0.4);
+    --shadow-card: 0 15px 35px -5px hsl(0 0% 0% / 0.8);
+    --shadow-glow: 0 0 40px hsl(var(--accent) / 0.5);
+    --shadow-intense: 0 0 60px hsl(var(--primary) / 0.6);
 
-    /* Animations */
+    /* Energetic Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-dramatic: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     --sidebar-background: 0 0% 98%;
 
@@ -97,9 +100,15 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     background: var(--gradient-background);
     min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Oswald', 'Poppins', system-ui, sans-serif;
+    font-weight: 600;
   }
 }
 
@@ -117,26 +126,30 @@
     @apply opacity-50 cursor-not-allowed;
   }
 
-  /* Premium Button Variants */
+  /* Sales Page Button Variants */
   .btn-premium {
-    @apply relative px-8 py-4 rounded-xl font-semibold text-lg;
-    background: var(--gradient-accent);
-    color: hsl(var(--accent-foreground));
+    @apply relative px-8 py-5 rounded-2xl font-bold text-xl uppercase tracking-wider;
+    font-family: 'Oswald', sans-serif;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
     box-shadow: var(--shadow-premium);
-    transition: var(--transition-smooth);
+    transition: var(--transition-dramatic);
+    border: 2px solid hsl(var(--accent));
   }
 
   .btn-premium:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-intense);
+    background: var(--gradient-accent);
+    color: hsl(var(--accent-foreground));
   }
 
   .btn-premium:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(1.01);
   }
 
   .btn-pulse {
-    animation: pulse-glow 2s ease-in-out infinite;
+    animation: pulse-intense 1.5s ease-in-out infinite;
   }
 
   /* Video Container */
@@ -145,22 +158,31 @@
     box-shadow: var(--shadow-card);
   }
 
-  /* Step Card */
+  /* Step Card - Sales Page Style */
   .step-card {
-    @apply p-6 rounded-2xl border transition-all duration-300;
+    @apply p-8 rounded-3xl border-2 transition-all duration-300;
     background: var(--gradient-card);
     border-color: hsl(var(--border));
     box-shadow: var(--shadow-card);
   }
 
   .step-card.active {
-    border-color: hsl(var(--accent));
-    box-shadow: 0 0 20px hsl(var(--accent) / 0.3);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.4);
+    background: linear-gradient(145deg, hsl(var(--primary) / 0.1), hsl(0 0% 8%));
   }
 
   .step-card.completed {
     border-color: hsl(var(--success));
-    box-shadow: 0 0 15px hsl(var(--success) / 0.2);
+    box-shadow: 0 0 25px hsl(var(--success) / 0.3);
+    background: linear-gradient(145deg, hsl(var(--success) / 0.1), hsl(0 0% 8%));
+  }
+
+  .step-card.step-blocked {
+    opacity: 0.6;
+    cursor: pointer; /* Allow clicks for notifications */
+    border-color: hsl(var(--muted));
+    background: linear-gradient(145deg, hsl(var(--muted) / 0.1), hsl(0 0% 6%));
   }
 }
 
@@ -188,13 +210,15 @@
     }
   }
 
-  @keyframes pulse-glow {
+  @keyframes pulse-intense {
     0%, 100% {
       opacity: 1;
+      transform: scale(1);
     }
     50% {
-      opacity: 0.8;
-      box-shadow: 0 0 30px hsl(var(--accent) / 0.6);
+      opacity: 0.9;
+      transform: scale(1.02);
+      box-shadow: 0 0 50px hsl(var(--primary) / 0.7);
     }
   }
 

@@ -10,6 +10,7 @@ export const OnboardingPage: React.FC = () => {
   const [showStep1Button, setShowStep1Button] = useState(false);
   const [step1CompletedTime, setStep1CompletedTime] = useState<number | null>(null);
   const [showStep2Button, setShowStep2Button] = useState(false);
+  const [step2CompletedTime, setStep2CompletedTime] = useState<number | null>(null);
 
   // Track video time and show button after 3 minutes (180 seconds)
   // For demo purposes, using 10 seconds instead of 180
@@ -41,6 +42,34 @@ export const OnboardingPage: React.FC = () => {
     }
   }, [step1CompletedTime, currentStep]);
 
+  // Track step 2 completion and unlock step 3 after 3 minutes automatically
+  useEffect(() => {
+    if (step2CompletedTime) {
+      const timeElapsed = Date.now() - step2CompletedTime;
+      if (timeElapsed >= 10000) { // 10 seconds for demo, change to 180000 for production
+        if (currentStep < 3) {
+          setCurrentStep(3);
+          toast({
+            title: "🎯 Passo 3 Desbloqueado!",
+            description: "Seu Script Milionário está pronto!",
+          });
+        }
+      } else {
+        const timeout = setTimeout(() => {
+          if (currentStep < 3) {
+            setCurrentStep(3);
+            toast({
+              title: "🎯 Passo 3 Desbloqueado!",
+              description: "Seu Script Milionário está pronto!",
+            });
+          }
+        }, 10000 - timeElapsed); // 10 seconds for demo
+        
+        return () => clearTimeout(timeout);
+      }
+    }
+  }, [step2CompletedTime, currentStep]);
+
   const handleStep1Complete = () => {
     setStep1CompletedTime(Date.now());
     setCurrentStep(2);
@@ -51,10 +80,10 @@ export const OnboardingPage: React.FC = () => {
   };
 
   const handleStep2Complete = () => {
-    setCurrentStep(3);
+    setStep2CompletedTime(Date.now());
     toast({
       title: "Diagnóstico Liberado!",
-      description: "Acesse agora seu Script Milionário!",
+      description: "Aguarde 10 segundos para desbloquear o passo final!",
     });
   };
 
@@ -71,10 +100,10 @@ export const OnboardingPage: React.FC = () => {
       });
       return;
     }
-    if (stepId === 3 && !showStep2Button) {
+    if (stepId === 3 && currentStep < 3) {
       toast({
         title: "Passo Bloqueado", 
-        description: "Complete o passo 2 primeiro!",
+        description: "Termine o passo anterior primeiro!",
         variant: "destructive",
       });
       return;
