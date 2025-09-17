@@ -5,85 +5,32 @@ import { toast } from '@/hooks/use-toast';
 import instructorImage from '@/assets/instructor-pointing.jpg';
 
 export const OnboardingPage: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [videoTime, setVideoTime] = useState(0);
+  const [pageLoadTime] = useState(Date.now());
   const [showStep1Button, setShowStep1Button] = useState(false);
-  const [step1CompletedTime, setStep1CompletedTime] = useState<number | null>(null);
-  const [showStep2Button, setShowStep2Button] = useState(false);
-  const [step2CompletedTime, setStep2CompletedTime] = useState<number | null>(null);
+  const [stepsUnlocked, setStepsUnlocked] = useState(false);
+  const [expandedSteps, setExpandedSteps] = useState<number[]>([1]);
 
-  // Track video time and show button after 3 minutes (180 seconds)
-  // For demo purposes, using 10 seconds instead of 180
+  // Simple 1-minute timer from page load
   useEffect(() => {
-    if (videoTime >= 10 && currentStep === 1) {
+    const timeout = setTimeout(() => {
       setShowStep1Button(true);
-    }
-  }, [videoTime, currentStep]);
+      setStepsUnlocked(true);
+    }, 60000); // 1 minute
 
-  // Track step 1 completion and unlock step 2 after 10 seconds for demo
-  useEffect(() => {
-    if (step1CompletedTime) {
-      const timeElapsed = Date.now() - step1CompletedTime;
-      if (timeElapsed >= 10000) { // 10 seconds for demo, change to 180000 for production
-        setShowStep2Button(true);
-        if (currentStep < 2) {
-          setCurrentStep(2);
-        }
-      } else {
-        const timeout = setTimeout(() => {
-          setShowStep2Button(true);
-          if (currentStep < 2) {
-            setCurrentStep(2);
-          }
-        }, 10000 - timeElapsed); // 10 seconds for demo
-        
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [step1CompletedTime, currentStep]);
-
-  // Track step 2 completion and unlock step 3 after 3 minutes automatically
-  useEffect(() => {
-    if (step2CompletedTime) {
-      const timeElapsed = Date.now() - step2CompletedTime;
-      if (timeElapsed >= 10000) { // 10 seconds for demo, change to 180000 for production
-        if (currentStep < 3) {
-          setCurrentStep(3);
-          toast({
-            title: "🎯 Passo 3 Desbloqueado!",
-            description: "Seu Script Milionário está pronto!",
-          });
-        }
-      } else {
-        const timeout = setTimeout(() => {
-          if (currentStep < 3) {
-            setCurrentStep(3);
-            toast({
-              title: "🎯 Passo 3 Desbloqueado!",
-              description: "Seu Script Milionário está pronto!",
-            });
-          }
-        }, 10000 - timeElapsed); // 10 seconds for demo
-        
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [step2CompletedTime, currentStep]);
+    return () => clearTimeout(timeout);
+  }, [pageLoadTime]);
 
   const handleStep1Complete = () => {
-    setStep1CompletedTime(Date.now());
-    setCurrentStep(2);
     toast({
       title: "Passo 1 Concluído!",
-      description: "Aguarde 10 segundos para desbloquear o próximo passo.",
+      description: "Agora você pode acessar os outros passos.",
     });
   };
 
   const handleStep2Complete = () => {
-    setStep2CompletedTime(Date.now());
     toast({
       title: "Diagnóstico Liberado!",
-      description: "Aguarde 10 segundos para desbloquear o passo final!",
+      description: "Passo 2 concluído com sucesso!",
     });
   };
 
@@ -92,28 +39,30 @@ export const OnboardingPage: React.FC = () => {
       // Step 1 is always accessible
       return;
     }
-    if (stepId === 2 && !step1CompletedTime) {
+    
+    if (!stepsUnlocked) {
       toast({
         title: "Passo Bloqueado",
-        description: "Termine o passo 1 primeiro!",
+        description: "Aguarde a liberação automática em 1 minuto.",
         variant: "destructive",
       });
       return;
     }
-    if (stepId === 3 && currentStep < 3) {
-      toast({
-        title: "Passo Bloqueado", 
-        description: "Termine o passo anterior primeiro!",
-        variant: "destructive",
-      });
-      return;
+
+    // Toggle expansion for steps 2 and 3
+    if (stepId === 2 || stepId === 3) {
+      setExpandedSteps(prev => 
+        prev.includes(stepId) 
+          ? prev.filter(id => id !== stepId)
+          : [...prev, stepId]
+      );
     }
   };
 
   const getStepStatus = (stepId: number): 'blocked' | 'active' | 'completed' => {
-    if (stepId < currentStep) return 'completed';
-    if (stepId === currentStep) return 'active';
-    return 'blocked';
+    if (stepId === 1) return 'active';
+    if (!stepsUnlocked) return 'blocked';
+    return 'active';
   };
 
   const steps: StepData[] = [
@@ -121,11 +70,10 @@ export const OnboardingPage: React.FC = () => {
       id: 1,
       title: "⚠️ SEU GARGÁLO DE LUCRO",
       status: getStepStatus(1),
-      content: currentStep === 1 ? (
+      content: expandedSteps.includes(1) ? (
         <div className="space-y-6">
           <WistiaPlayer 
             mediaId="capkm9wu3d"
-            onTimeUpdate={setVideoTime}
             className="w-full"
           />
           {showStep1Button && (
@@ -148,7 +96,7 @@ export const OnboardingPage: React.FC = () => {
       id: 2,
       title: "Diagnóstico Comercial",
       status: getStepStatus(2),
-      content: currentStep === 2 ? (
+      content: expandedSteps.includes(2) ? (
         <div className="space-y-6 animate-fade-in">
           <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 border border-accent/30">
             <h3 className="text-2xl font-bold text-accent mb-4">
@@ -157,22 +105,15 @@ export const OnboardingPage: React.FC = () => {
             <p className="text-lg mb-6">
               Parabéns! Você desbloqueou uma oferta especial.
             </p>
-            {showStep2Button && (
-              <a
-                href="https://payment.ticto.app/O1928D5A5"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handleStep2Complete}
-                className="btn-premium btn-pulse inline-block"
-              >
-                🚀 Quero Lucrar Mais
-              </a>
-            )}
-            {!showStep2Button && (
-              <div className="text-muted-foreground">
-                Aguardando liberação automática...
-              </div>
-            )}
+            <a
+              href="https://payment.ticto.app/O1928D5A5"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleStep2Complete}
+              className="btn-premium btn-pulse inline-block"
+            >
+              🚀 Quero Lucrar Mais
+            </a>
           </div>
         </div>
       ) : undefined,
@@ -181,7 +122,7 @@ export const OnboardingPage: React.FC = () => {
       id: 3,
       title: "Acessar Script Milionário",
       status: getStepStatus(3),
-      content: currentStep === 3 ? (
+      content: expandedSteps.includes(3) ? (
         <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-success/20 to-primary/10 border border-success/30 animate-fade-in">
           <h3 className="text-3xl font-bold text-success mb-4">
             🎯 ACESSE AGORA!
