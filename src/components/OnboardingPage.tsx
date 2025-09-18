@@ -160,12 +160,12 @@ export const OnboardingPage: React.FC = () => {
             </div>
             
             {/* Book Stack Image */}
-            <div className="flex justify-center lg:justify-start h-full">
-              <div className="relative w-full max-w-md h-full min-h-[400px]">
+            <div className="flex justify-center lg:justify-start">
+              <div className="relative w-full max-w-md">
                 <img 
                   src={bookStackImage}
                   alt="Stack de livros representando conhecimento dos Scripts Milionários"
-                  className="w-full h-full object-contain rounded-2xl shadow-lg"
+                  className="w-full h-auto object-contain rounded-2xl shadow-lg"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-2xl"></div>
               </div>
@@ -183,10 +183,7 @@ export const OnboardingPage: React.FC = () => {
               </p>
             </div>
             
-            <div className="relative space-y-4">
-              {/* Connecting Line */}
-              <div className="absolute left-6 top-12 bottom-12 w-0.5 bg-gradient-to-b from-accent/30 via-accent/60 to-accent/30 z-0"></div>
-              
+            <div className="space-y-4">
               {steps.map((step) => (
                 <OnboardingStep
                   key={step.id}
