@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { OnboardingStep, StepData } from './OnboardingStep';
 import { WistiaPlayer } from './WistiaPlayer';
 import { toast } from '@/hooks/use-toast';
-import instructorImage from '@/assets/instructor-pointing.jpg';
+import bookStackImage from '@/assets/book-stack.png';
 
 export const OnboardingPage: React.FC = () => {
   const [pageLoadTime] = useState(Date.now());
@@ -131,14 +131,9 @@ export const OnboardingPage: React.FC = () => {
             Seu Script Milionário está pronto para você!
           </p>
           <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              toast({
-                title: "🎉 Acesso Liberado!",
-                description: "Em breve você receberá as instruções de acesso.",
-              });
-            }}
+            href="https://wa.me/5521981019493?text=Oi%20Jos%C3%A9%2C%20acabei%20de%20adquirir%20os%20Scripts%20Milion%C3%A1rios%2C%20qual%20o%20pr%C3%B3ximo%20passo%3F"
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-premium inline-block bg-gradient-to-r from-success to-primary"
           >
             📚 MEUS ACESSOS
@@ -164,15 +159,15 @@ export const OnboardingPage: React.FC = () => {
               </p>
             </div>
             
-            {/* Instructor Image */}
-            <div className="flex justify-center lg:justify-start">
-              <div className="relative">
+            {/* Book Stack Image */}
+            <div className="flex justify-center lg:justify-start h-full">
+              <div className="relative w-full max-w-md h-full min-h-[400px]">
                 <img 
-                  src={instructorImage}
-                  alt="Instrutor do Script Milionário apontando para os próximos passos"
-                  className="w-80 h-80 object-cover rounded-2xl shadow-lg"
+                  src={bookStackImage}
+                  alt="Stack de livros representando conhecimento dos Scripts Milionários"
+                  className="w-full h-full object-contain rounded-2xl shadow-lg"
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-2xl"></div>
               </div>
             </div>
           </div>
@@ -188,7 +183,10 @@ export const OnboardingPage: React.FC = () => {
               </p>
             </div>
             
-            <div className="space-y-4">
+            <div className="relative space-y-4">
+              {/* Connecting Line */}
+              <div className="absolute left-6 top-12 bottom-12 w-0.5 bg-gradient-to-b from-accent/30 via-accent/60 to-accent/30 z-0"></div>
+              
               {steps.map((step) => (
                 <OnboardingStep
                   key={step.id}
